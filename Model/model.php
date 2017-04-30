@@ -19,3 +19,53 @@ function insert($name, $description, $created_at){
 
     return $statement->execute();
 }
+
+function findAll(){
+
+    $connect = getConnection();
+    $sql = "SELECT * FROM article";
+    $statement = $connect->prepare($sql);
+    $statement->execute();
+
+    return $statement->fetchAll();
+}
+
+function findById($id){
+
+    $dbConnect = getConnection();
+    $sql = 'SELECT * FROM article WHERE id=:id';
+    $statement = $dbConnect->prepare($sql);
+    $statement->bindValue(":id",$id);
+    $statement->execute();
+
+    return $statement->fetch();
+}
+
+function update($id, $name, $description, $created_at){
+
+    $dbConn = getConnection();
+
+    $sql = "UPDATE article 
+            SET name = :name, description = :description, created_at = :created_at
+            WHERE id = :id";
+    $statement = $dbConn->prepare($sql);
+    $statement->bindValue(':id', $id);
+    $statement->bindValue(':name', $name);
+    $statement->bindValue(':description', $description);
+    $statement->bindValue(':created_at', $created_at);
+    $result = $statement->execute();
+
+    return var_dump($result);
+}
+
+function delete($id){
+
+    $dbConnect = getConnection();
+
+    $sql = 'DELETE FROM article WHERE id=:id';
+    $statement = $dbConnect->prepare($sql);
+    $statement->bindValue(":id",$id);
+    $statement->execute();
+
+    return var_dump($statement);
+}
